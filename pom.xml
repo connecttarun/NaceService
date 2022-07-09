@@ -8,14 +8,18 @@
 		<version>2.7.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.dbank.ist</groupId>
 	<artifactId>nace-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>nace-service</name>
 	<description>Demo project for Java Backend</description>
+
 	<properties>
 		<java.version>11</java.version>
+		<io.springfox.version>3.0.0</io.springfox.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -39,19 +43,19 @@
 		<dependency>										<!-- swagger dependencies -->
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
-			<version>3.0.0</version>
+			<version>${io.springfox.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>3.0.0</version>
+			<version>${io.springfox.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
-			<version>3.0.0</version>
+			<version>${io.springfox.version}</version>
 		</dependency>
-		<dependency>										<!-- for entity to DTO mapping  -->
+		<dependency>										<!-- for entity <-> DTO mapping  -->
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
 			<version>3.0.0</version>
@@ -87,6 +91,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 </project>

@@ -33,6 +33,6 @@ public class NaceServiceExceptionController {
     public ResponseEntity<?> parentNotFoundExecptionHandler(ParentNotFoundExecption exception) {
         return new ResponseEntity<>(String.format(
                 "Nace with code %s not found in the Database. Please create Parent first or use an existing record", exception.getMessage())
-                , HttpStatus.BAD_REQUEST);
+                , HttpStatus.NOT_ACCEPTABLE);
     }
 }
