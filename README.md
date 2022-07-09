@@ -38,3 +38,16 @@ The default port is configured as 10002. You can choose to override the same by 
 ```shell
 java -jar target/nace-service-0.0.1-SNAPSHOT-boot.jar  --server.port=10005
 ```
+
+### Excel uploads
+
+You can upload excels for bulk uploading Nace records. I am using [Ozlerhakan's library](https://github.com/ozlerhakan/poiji) to parse the excel
+and it consumes xls files very well. (can use a sample xls file added under resources)
+
+(Do pay attentions to the headers they are important)
+
+
+| order  | level | code | parent | description     | thisItemIncludes  | thisItemAlsoIncludes  | rulings          | thisItemExcludes   | referenceToIsicRev4 |
+|--------|:-----:|-----:|--------|-----------------|-------------------|-----------------------|------------------|--------------------|---------------------|
+| 398481 |   1   |    A |        | AGRICULTURE  A  | Includes Data  A  | AlsoIncludes Data  A  | rulings Data A   | exclusion Data A   | refrences data A    |
+| 398485 |   2   |  A.1 | A      | SUB-AGRICULTURE | Includes Data A.1 | AlsoIncludes Data A.1 | rulings Data A.1 | exclusion Data A.1 | refrences data A.1  |
