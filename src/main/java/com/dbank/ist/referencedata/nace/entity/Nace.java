@@ -1,12 +1,12 @@
 package com.dbank.ist.referencedata.nace.entity;
 
-import ch.qos.logback.classic.db.names.TableName;
 import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Builder
 @ToString
@@ -15,12 +15,13 @@ import javax.persistence.Id;
 @AllArgsConstructor     // for builder
 @Getter
 @Setter
+@Table(name = "NACE")
 @Entity
 public class Nace {
 
     @Id
     @NotNull
-    @Column(name="itemID")
+    @Column(name = "itemID")
     Integer order;
 
     Integer level;
@@ -31,7 +32,7 @@ public class Nace {
 
     String description;
 
-    @Column(length = 2000)
+    @Column(length = 6000)
     String thisItemIncludes;
 
     @Column(length = 2000)

@@ -1,6 +1,8 @@
 package com.dbank.ist.referencedata.nace.service;
 
 import com.dbank.ist.referencedata.nace.dto.NaceDto;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public interface NaceService {
@@ -10,4 +12,5 @@ public interface NaceService {
 
     NaceDto putNaceRecord(NaceDto naceDto);
 
+    String bulkUploadFromExcel(MultipartFile excelFile);
 }

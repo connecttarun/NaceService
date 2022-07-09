@@ -1,10 +1,13 @@
 package com.dbank.ist.referencedata.nace.config;
 
+import com.dbank.ist.referencedata.nace.dto.NaceDto;
+import com.dbank.ist.referencedata.nace.entity.Nace;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.poiji.option.PoijiOptions;
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -17,7 +20,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class NaceServiceConfiguration {
 
     @Bean
-    public Docket docket(){
+    public Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select().apis(RequestHandlerSelectors.basePackage("com.dbank.ist.referencedata.nace"))
                 .paths(PathSelectors.any())
@@ -26,20 +29,31 @@ public class NaceServiceConfiguration {
 
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .contact(new Contact("Best Team","www.dbank.com/bestTeam","bestTeamMail@dbank.com"))
+                .contact(new Contact("Best Team", "www.dbank.com/bestTeam", "bestTeamMail@dbank.com"))
                 .title("The Nace Data Service")
                 .description("The service acts as the owner and guardian of the NACE reference data")
                 .build();
     }
 
     @Bean
-    public ModelMapper modelMapper(){
-        return new ModelMapper();
+    public ModelMapper modelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.createTypeMap(NaceDto.class, Nace.class)
+                .setPropertyCondition(Conditions.isNotNull());
+        return modelMapper;
     }
 
     @Bean
-    public ObjectMapper objectMapper(){
+    public ObjectMapper objectMapper() {
         return new ObjectMapper();
+    }
+
+    @Bean
+    public PoijiOptions poijiOptions(){
+        return PoijiOptions.PoijiOptionsBuilder.settings()
+                .addListDelimiter(";")
+                .preferNullOverDefault(true)
+                .build();
     }
 
 }

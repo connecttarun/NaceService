@@ -2,6 +2,10 @@ package com.dbank.ist.referencedata.nace.util;
 
 import com.dbank.ist.referencedata.nace.dto.NaceDto;
 import com.dbank.ist.referencedata.nace.entity.Nace;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
+
+import java.io.IOException;
 
 public class NaceTestUtils {
 
@@ -14,8 +18,16 @@ public class NaceTestUtils {
         return builder.build();
     }
 
-    public static Nace getNace(int id) {
+    public static Nace getStubNace(int id) {
         Nace.NaceBuilder builder = Nace.builder().order(id).description(DESCRIPTION_FIVE.replace("5", Integer.toString(id)));
         return builder.build();
+    }
+
+    public static MockMultipartFile getMockMultipartFile() throws IOException {
+        return new MockMultipartFile(
+                "file",
+                "ForTestNace.xls",
+                "application/x-xls",
+                new ClassPathResource("bulkupload/ForTestNace.xls").getInputStream());
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -23,8 +24,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.dbank.ist.referencedata.nace.service.NaceServiceImpl.FILE_UPLOADED_SUCCESSFULLY;
 import static com.dbank.ist.referencedata.nace.util.NaceTestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(MockitoJUnitRunner.class)
 @WebMvcTest(value = NaceResource.class)
@@ -80,7 +83,7 @@ class NaceResourceTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .put("/nacedata/")
-                .content(mapper.writeValueAsString(naceDto).replace("\"order\":5,","")) //removing order
+                .content(mapper.writeValueAsString(naceDto).replace("\"order\":5,", "")) //removing order
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
@@ -134,4 +137,16 @@ class NaceResourceTest {
         }
     }
 
+    @SneakyThrows
+    @Test
+    public void testUploadBulkUploadDataViaExcel() {
+        MockMultipartFile mockMultipartFile = getMockMultipartFile();
+        Mockito.when(naceService.bulkUploadFromExcel(mockMultipartFile)).thenReturn(FILE_UPLOADED_SUCCESSFULLY);
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/nacedata/bulkupload")
+                        .file(mockMultipartFile))
+                        .andExpect(status().isCreated());
+
+        Mockito.verify(naceService).bulkUploadFromExcel(mockMultipartFile);
+    }
 }
