@@ -23,6 +23,7 @@ public class NaceDto {
     @ExcelCellName(mandatory = false, value = "level")
     Integer level;
 
+    @NotNull
     @ExcelCellName(mandatory = false, value = "code")
     String code;
 

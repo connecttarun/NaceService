@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.poiji.option.PoijiOptions;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -38,8 +39,15 @@ public class NaceServiceConfiguration {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.createTypeMap(NaceDto.class, Nace.class)
-                .setPropertyCondition(Conditions.isNotNull());
+
+        TypeMap<NaceDto, Nace> dtoToEntityMap = modelMapper.createTypeMap(NaceDto.class, Nace.class);
+        dtoToEntityMap.setPropertyCondition(Conditions.isNotNull());
+        dtoToEntityMap.addMapping(NaceDto::getParent, (Nace nace, String value) -> nace.getParent().setCode(value));
+
+        TypeMap<Nace, NaceDto> entityToDtoMap = modelMapper.createTypeMap(Nace.class, NaceDto.class);
+        entityToDtoMap.setPropertyCondition(Conditions.isNotNull());
+        entityToDtoMap.addMapping(nace -> nace.getParent().getCode(), NaceDto::setParent);
+
         return modelMapper;
     }
 
@@ -49,11 +57,10 @@ public class NaceServiceConfiguration {
     }
 
     @Bean
-    public PoijiOptions poijiOptions(){
+    public PoijiOptions poijiOptions() {
         return PoijiOptions.PoijiOptionsBuilder.settings()
                 .addListDelimiter(";")
                 .preferNullOverDefault(true)
                 .build();
     }
-
 }

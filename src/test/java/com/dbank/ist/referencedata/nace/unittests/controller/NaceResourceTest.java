@@ -52,7 +52,7 @@ class NaceResourceTest {
         MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 
         Mockito.verify(naceService, Mockito.times(1)).getNaceRecord(ID_FIVE);
-        assertEquals("{\"order\":5,\"level\":null,\"code\":null,\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"
+        assertEquals("{\"order\":5,\"level\":null,\"code\":\"5\",\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"
                 , mvcResult.getResponse().getContentAsString()
                 , "The response body is not as expected");
         assertEquals(HttpStatus.OK, HttpStatus.valueOf(mvcResult.getResponse().getStatus()), "The response status is not as expected");
@@ -90,7 +90,7 @@ class NaceResourceTest {
         MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 
         Mockito.verify(naceService).putNaceRecord(naceDto);
-        assertEquals("The \"Order\" is a mandatory field", mvcResult.getResponse().getContentAsString(), "The response body is not as expected");
+        assertEquals("The \"Code\" is a mandatory field", mvcResult.getResponse().getContentAsString(), "The response body is not as expected");
         assertEquals(HttpStatus.BAD_REQUEST, HttpStatus.valueOf(mvcResult.getResponse().getStatus()), "The response status is not as expected");
 
     }
@@ -110,7 +110,7 @@ class NaceResourceTest {
         MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 
         Mockito.verify(naceService).putNaceRecord(naceDto);
-        assertEquals("{\"order\":5,\"level\":null,\"code\":null,\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"
+        assertEquals("{\"order\":5,\"level\":null,\"code\":\"5\",\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"
                 , mvcResult.getResponse().getContentAsString()
                 , "The response body is not as expected");
         assertEquals(HttpStatus.CREATED, HttpStatus.valueOf(mvcResult.getResponse().getStatus()), "The response status is not as expected");
@@ -129,8 +129,8 @@ class NaceResourceTest {
             MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 
             Mockito.verify(naceService, Mockito.times(1)).getAllNaceRecords();
-            assertEquals("[{\"order\":5,\"level\":null,\"code\":null,\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}," +
-                            "{\"order\":2,\"level\":null,\"code\":null,\"parent\":null,\"description\":\"Description for record 2\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}]"
+            assertEquals("[{\"order\":5,\"level\":null,\"code\":\"5\",\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}," +
+                            "{\"order\":2,\"level\":null,\"code\":\"2\",\"parent\":null,\"description\":\"Description for record 2\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}]"
                     , mvcResult.getResponse().getContentAsString()
                     , "The response body is not as expected");
             assertEquals(HttpStatus.OK, HttpStatus.valueOf(mvcResult.getResponse().getStatus()), "The response status is not as expected");

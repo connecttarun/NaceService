@@ -57,20 +57,20 @@ public class EndToEndIntegrationsTest {
 
     @SneakyThrows
     @Test
-    public void testPutNaceDetailsForAbsentOrderField() {
+    public void testPutNaceDetailsForAbsentCodeField() {
         NaceDto naceDto = getNaceDto(ID_FIVE);
+        naceDto.setCode(null);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .put("/nacedata/")
-                .content(mapper.writeValueAsString(naceDto).replace("\"order\":5,", "")) //removing order
+                .content(mapper.writeValueAsString(naceDto))
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 
-        assertEquals("The \"Order\" is a mandatory field", mvcResult.getResponse().getContentAsString(), "The response body is not as expected");
+        assertEquals("The \"Code\" is a mandatory field", mvcResult.getResponse().getContentAsString(), "The response body is not as expected");
         assertEquals(HttpStatus.BAD_REQUEST, HttpStatus.valueOf(mvcResult.getResponse().getStatus()), "The response status is not as expected");
-
         assertEquals(0, repo.count(), "The count in DB table is not as expected");
     }
 
@@ -89,7 +89,7 @@ public class EndToEndIntegrationsTest {
 
         MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 
-        assertEquals("{\"order\":5,\"level\":null,\"code\":null,\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"
+        assertEquals("{\"order\":5,\"level\":null,\"code\":\"5\",\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"
                 , mvcResult.getResponse().getContentAsString()
                 , "The response body is not as expected");
         assertEquals(HttpStatus.CREATED, HttpStatus.valueOf(mvcResult.getResponse().getStatus()), "The response status is not as expected");
@@ -109,7 +109,7 @@ public class EndToEndIntegrationsTest {
 
         MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 
-        assertEquals("{\"order\":5,\"level\":null,\"code\":null,\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"
+        assertEquals("{\"order\":5,\"level\":null,\"code\":\"5\",\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"
                 , mvcResult.getResponse().getContentAsString()
                 , "The response body is not as expected");
         assertEquals(HttpStatus.OK, HttpStatus.valueOf(mvcResult.getResponse().getStatus()), "The response status is not as expected");
@@ -131,9 +131,9 @@ public class EndToEndIntegrationsTest {
             MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
 
             assertTrue("The response body is not as expected", mvcResult.getResponse().getContentAsString().contains(
-                    "{\"order\":5,\"level\":null,\"code\":null,\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"));
+                    "{\"order\":5,\"level\":null,\"code\":\"5\",\"parent\":null,\"description\":\"Description for record 5\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"));
             assertTrue("The response body is not as expected", mvcResult.getResponse().getContentAsString().contains(
-                    "{\"order\":2,\"level\":null,\"code\":null,\"parent\":null,\"description\":\"Description for record 2\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"));
+                    "{\"order\":2,\"level\":null,\"code\":\"2\",\"parent\":null,\"description\":\"Description for record 2\",\"thisItemIncludes\":null,\"thisItemAlsoIncludes\":null,\"rulings\":null,\"thisItemExcludes\":null,\"referenceToIsicRev4\":null}"));
             assertEquals(HttpStatus.OK, HttpStatus.valueOf(mvcResult.getResponse().getStatus()), "The response status is not as expected");
         }
     }

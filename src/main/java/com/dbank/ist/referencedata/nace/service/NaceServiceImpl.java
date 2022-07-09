@@ -2,6 +2,7 @@ package com.dbank.ist.referencedata.nace.service;
 
 import com.dbank.ist.referencedata.nace.dto.NaceDto;
 import com.dbank.ist.referencedata.nace.entity.Nace;
+import com.dbank.ist.referencedata.nace.exceptions.ParentNotFoundExecption;
 import com.dbank.ist.referencedata.nace.repository.NaceDataRepository;
 import com.poiji.bind.Poiji;
 import com.poiji.option.PoijiOptions;
@@ -9,7 +10,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -21,17 +23,16 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-@Component
+
 @Slf4j
+@Service
 public class NaceServiceImpl implements NaceService {
 
     public static final String UPLOAD_DIRECTORY = "uploaded/";
     public static final String FILE_UPLOADED_SUCCESSFULLY = "File Uploaded Successfully";
     private final PoijiOptions poijiOptions;
-    private NaceDataRepository naceDataRepository;
-    private ModelMapper modelMapper;
-    private Nace savedNaceRecord;
-
+    private final NaceDataRepository naceDataRepository;
+    private final ModelMapper modelMapper;
 
     @SneakyThrows
     @Autowired
@@ -53,9 +54,10 @@ public class NaceServiceImpl implements NaceService {
         return allNaceRecords;
     }
 
+    @SneakyThrows
     @Override
-    public NaceDto getNaceRecord(int id) throws NoSuchElementException {
-        Nace nace = naceDataRepository.findById(id).get();
+    public NaceDto getNaceRecord(int id) {
+        Nace nace = naceDataRepository.findByOrder(id).get();
         log.info("Fetched from database {} for id {}", nace, id);
         return modelMapper.map(nace, NaceDto.class);
     }
@@ -63,8 +65,13 @@ public class NaceServiceImpl implements NaceService {
     @Override
     public NaceDto putNaceRecord(NaceDto naceDto) {
         log.info("Received to save : {}", naceDto.toString());
-        Nace savedNaceRecord = null;
-        savedNaceRecord = naceDataRepository.save(modelMapper.map(naceDto, Nace.class));
+        Nace savedNaceRecord;
+        try {
+            savedNaceRecord = naceDataRepository.save(modelMapper.map(naceDto, Nace.class));
+        } catch (JpaObjectRetrievalFailureException exception) {
+            log.error("The parent nace with code {} wasn't found ", naceDto.getParent());
+            throw new ParentNotFoundExecption(naceDto.getParent());
+        }
 
         log.debug("Saved with order :{}", savedNaceRecord.getOrder());
         return modelMapper.map(savedNaceRecord, NaceDto.class);

@@ -3,32 +3,33 @@ package com.dbank.ist.referencedata.nace.entity;
 import com.sun.istack.NotNull;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
-@ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor      // for modelmapper
 @AllArgsConstructor     // for builder
-@Getter
-@Setter
+@Data
 @Table(name = "NACE")
 @Entity
 public class Nace {
 
-    @Id
-    @NotNull
+    @EqualsAndHashCode.Include
     @Column(name = "itemID")
     Integer order;
 
     Integer level;
 
+    @EqualsAndHashCode.Include
+    @Id
+    @NotNull
     String code;
 
-    String parent;
+    @OneToOne
+    @JoinColumn(name = "parent",referencedColumnName = "code")
+    Nace parent;
 
     String description;
 
@@ -38,6 +39,7 @@ public class Nace {
     @Column(length = 2000)
     String thisItemAlsoIncludes;
 
+    @Column(length = 1000)
     String rulings;
 
     @Column(length = 2000)

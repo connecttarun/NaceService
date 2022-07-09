@@ -35,23 +35,23 @@ class NaceServiceImplTest {
     @Test
     void testGetNaceRecord() {
 
-        Nace nace = getNace(ID_FIVE);
+        Nace nace = getStubNace(ID_FIVE);
         NaceDto expectedNaceRecord = NaceDto.builder().order(ID_FIVE).description(DESCRIPTION_FIVE).build();
 
-        Mockito.when(naceDataRepository.findById(ID_FIVE.intValue())).thenReturn(Optional.of(nace));
+        Mockito.when(naceDataRepository.findByOrder(ID_FIVE)).thenReturn(Optional.of(nace));
         Mockito.when(mapper.map(nace, NaceDto.class)).thenReturn(expectedNaceRecord);
 
         NaceDto actualNaceRecord = naceService.getNaceRecord(ID_FIVE);
 
-        Mockito.verify(naceDataRepository, Mockito.times(1)).findById(ID_FIVE.intValue());
+        Mockito.verify(naceDataRepository, Mockito.times(1)).findByOrder(ID_FIVE.intValue());
         Mockito.verify(mapper, Mockito.times(1)).map(nace, NaceDto.class);
         assertEquals(expectedNaceRecord, actualNaceRecord, "The received naceDto record didn't match");
     }
 
     @Test
     void testGetAllNaceRecords() {
-        Nace naceFive = getNace(ID_FIVE);
-        Nace naceTwo = getNace(ID_TWO);
+        Nace naceFive = getStubNace(ID_FIVE);
+        Nace naceTwo = getStubNace(ID_TWO);
         NaceDto naceDtoFive = getNaceDto(ID_FIVE);
         NaceDto naceDtoTwo = getNaceDto(ID_TWO);
 
@@ -70,7 +70,7 @@ class NaceServiceImplTest {
 
     @Test
     void testPutNaceRecord() {
-        Nace naceFive = getNace(ID_FIVE);
+        Nace naceFive = getStubNace(ID_FIVE);
         NaceDto naceDtoFive = getNaceDto(ID_FIVE);
 
         Mockito.when(naceDataRepository.save(naceFive)).thenReturn(naceFive);
@@ -83,6 +83,5 @@ class NaceServiceImplTest {
         Mockito.verify(mapper, Mockito.times(2)).map(any(), any());
 
         assertEquals(naceDtoFive, actualNaceRecord, "The Actual NaceDto received was different from expected");
-
     }
 }
